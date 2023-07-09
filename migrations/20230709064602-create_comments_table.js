@@ -1,6 +1,6 @@
 'use strict';
-
 const { DataTypes } = require('sequelize');
+
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -11,25 +11,28 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('comments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
+      comment: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
+      blog_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
       },
-      password: {
-        type: Sequelize.STRING,
+      userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      parent_comment_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -43,13 +46,13 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
-
     /**
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
      */
+     await queryInterface.dropTable('comments');
+
   }
 };

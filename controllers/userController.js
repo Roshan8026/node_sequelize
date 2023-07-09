@@ -1,7 +1,8 @@
 // controllers/userController.js
 
-const User = require('../models/User');
-const Blog = require('../models/Blog');
+const User    = require('../models/User');
+const Blog    = require('../models/Blog');
+const Comment = require('../models/Comment');
 
 
 exports.getUser = async (req, res) => {
@@ -15,7 +16,7 @@ exports.getUser = async (req, res) => {
 
 exports.getBlog = async (req,res) => {
   try {
-    const posts = await Blog.findAll({ where: { authorId: req.userId } });
+    const posts = await Blog.findAll({ where: { userId: req.userId } });
     res.json(posts);
   } catch (error) {
     console.error(error);
@@ -26,8 +27,7 @@ exports.getBlog = async (req,res) => {
 exports.postBlog = async (req,res) => {
   try{
     const { title, content } = req.body;
-
-    const post = await Blog.create({
+    const post  = await Blog.create({
       title,
       content,
       userId: req.userId,
@@ -65,7 +65,7 @@ exports.deleteBlog = async (req,res) => {
   try {
     const { id } = req.params;
 
-    const post = await Blog.findOne({ where: { id, authorId: req.userId } });
+    const post = await Blog.findOne({ where: { id, userId: req.userId } });
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
@@ -76,5 +76,38 @@ exports.deleteBlog = async (req,res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error occurred while deleting the post' });
+  }
+}
+
+exports.createComment = async (req , res) => {
+  try {
+    const blog_id = req.params.blogId;
+    const { comment } = req.body;
+    
+    if(comment == null){
+      res.status(500).json({ error: 'comment is cannot be null' });
+    }
+
+    // Create the comment
+    const blog_comment = await Comment.create({
+      comment,
+      blog_id,
+      userId: req.userId,
+    });
+
+    res.status(201).json(blog_comment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while creating the comment.' });
+  }
+}
+
+exports.listComment = async (req, res ) => {
+  try {
+    const Comments = await Comment.findAll({ where: { blog_id: req.params.blogId } });
+    res.json(Comments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error occurred while fetching comments' });
   }
 }

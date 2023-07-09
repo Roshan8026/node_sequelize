@@ -47,7 +47,7 @@ const verifyToken = (req, res, next) => {
     app.post('/register',  upload.none(), authController.register);
 
     // Login route
-    app.post('/login', authController.login);
+    app.post('/login', upload.none(), authController.login);
 
     // User route
     app.get('/users', verifyToken,  userController.getUser);
@@ -56,13 +56,23 @@ const verifyToken = (req, res, next) => {
 
     app.get('/post', verifyToken, userController.getBlog);
 
-    app.post('/post', verifyToken, userController.postBlog);
+    app.post('/post', verifyToken,  upload.none(), userController.postBlog);
 
 
-    app.put('/posts/:id', verifyToken, userController.updateBlog);
+    app.put('/posts/:id', verifyToken, upload.none(),  userController.updateBlog);
 
 
     app.delete('/posts/:id',verifyToken, userController.deleteBlog);
+
+
+    // comments
+
+    app.post('/posts/:blogId/comments', verifyToken , upload.none(), userController.createComment);
+
+    //List comment for specific blog
+
+    app.get('/posts/:blogId', verifyToken , userController.listComment);
+
 
 
     app.listen(3000, () => {

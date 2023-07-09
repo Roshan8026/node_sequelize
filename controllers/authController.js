@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
     const user = await User.create({ name, email, password: hashedPassword });
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user.id }, 'your-secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, 'secret-key', { expiresIn: '1h' });
 
     res.json({ token });
   } catch (error) {
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user.id }, 'your-secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, 'secret-key', { expiresIn: '1h' });
 
     res.json({ token });
   } catch (error) {

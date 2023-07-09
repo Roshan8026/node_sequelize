@@ -20,6 +20,6 @@ const User = sequelize.define('User', {
   },
 });
 
-// User.hasMany(Blog, { foreignKey: 'userId' });
+User.hasMany(Blog, { foreignKey: 'userId' });
 
 module.exports = User;
