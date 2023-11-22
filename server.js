@@ -10,6 +10,11 @@ const Blog           = require('./models/Blog');
 const authController = require('./controllers/authController');
 const userController = require('./controllers/userController');
 const app            = express();
+const cors = require("cors")
+
+app.use(cors({
+  credentials:true
+}));
 app.use(express.json());
 
 // Synchronize models with the database
@@ -20,6 +25,8 @@ sequelize.sync()
   .catch((error) => {
     console.error('Failed to synchronize models:', error);
   });
+
+ 
 
   // Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
@@ -43,11 +50,13 @@ const verifyToken = (req, res, next) => {
     // Configure multer for handling form data
     const upload = multer();
   
+    //checking node js 
+    app.get('test', authController.test);
     // Registration route
-    app.post('/register',  upload.none(), authController.register);
+    app.post('/api/register',  upload.none(), authController.register);
 
     // Login route
-    app.post('/login', upload.none(), authController.login);
+    app.post('/api/login', upload.none(), authController.login);
 
     // User route
     app.get('/users', verifyToken,  userController.getUser);

@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
+exports.test = async (req , res) => {
+  return res.status(200).json({ message: 'This is url is working ' });
+
+}
 
 // Registration controller
 exports.register = async (req, res) => {
@@ -25,7 +29,7 @@ exports.register = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, 'secret-key', { expiresIn: '1h' });
 
-    res.json({ token });
+    res.status(200).json({ "token" : token , 'success': "Registered Successfully" });
   } catch (error) {
     console.error('Registration failed:', error);
     res.status(500).json({ error: 'Registration failed' });
@@ -52,7 +56,7 @@ exports.login = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, 'secret-key', { expiresIn: '1h' });
 
-    res.json({ token });
+    res.status(200).json({ "token" : token , 'success': "Login Successfully",'user': user});
   } catch (error) {
     console.error('Login failed:', error);
     res.status(500).json({ error: 'Login failed' });
